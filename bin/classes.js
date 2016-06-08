@@ -148,7 +148,7 @@ class Pawn extends Piece {
             }
         }
 
-        // TODO
+        // TODO: finish pawn checks
         if (this.color === 'black') {
             if (pos.y < 7) {
                 console.log(board[pos.y + 1][pos.x]);
@@ -326,6 +326,7 @@ class Queen extends Piece {
             }
         }
 
+        // Queen moves are a combination of Bishop and Rook
         for (let i = 1; i < 8; i++) {
             checkAndMove('NW', pos.x - i, pos.y + i, this.color);
             checkAndMove('NE', pos.x + i, pos.y + i, this.color);
@@ -353,6 +354,35 @@ class King extends Piece {
     getValidMoves(board) {
         let moves = [];
         let pos = this.pos;
+        let blocked = {N: false, E: false, S: false, W: false};
+
+        // TODO: needs a check for if in range of another King
+        function checkAndMove(direction, x, y, color) {
+            if (!blocked[direction] && ChessBoard.isInBoard(x, y)) {
+                if (!board[y][x].isEmpty) {
+                    if (board[y][x].color !== color) {
+                        moves.push(`${x}-${y}`);
+                        blocked[direction] = true;
+                    } else {
+                        blocked[direction] = true;
+                    }
+                } else {
+                    moves.push(`${x}-${y}`);
+                }
+            }
+        }
+
+        // Kings move like lazy Queens, who can only move one space
+        checkAndMove('NW', pos.x - 1, pos.y + 1, this.color);
+        checkAndMove('NE', pos.x + 1, pos.y + 1, this.color);
+        checkAndMove('SW', pos.x - 1, pos.y - 1, this.color);
+        checkAndMove('SE', pos.x + 1, pos.y - 1, this.color);
+        checkAndMove('N', pos.x, pos.y + 1, this.color);
+        checkAndMove('E', pos.x + 1, pos.y, this.color);
+        checkAndMove('S', pos.x, pos.y - 1, this.color);
+        checkAndMove('W', pos.x - 1, pos.y, this.color);
+
+        return moves;
     }
 }
 
