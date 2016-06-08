@@ -1,0 +1,16 @@
+<script src="javascripts/vendor/zepto.min.js"></script>
+<script src="javascripts/vendor/handlebars-v4.0.5.js"></script>
+<script src="javascripts/index_page.js"></script>
+<script id="entry-template" type="text/x-handlebars-template">
+    \{{#each board as |row i|}}
+    <tr>
+        \{{#each row as |space j|}}
+        <td id=\{{space.id}} onclick="selectSpace('\{{space.id}}', \{{space.pos.x}}, \{{space.pos.y}}, \{{space.isEmpty}})">\{{space.icon}}</td>
+        \{{/each}}
+    </tr>
+    \{{/each}}
+</script>
+
+<h1>{{title}}</h1>
+<table id="chessTable" border="1">
+</table>

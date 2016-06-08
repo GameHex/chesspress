@@ -1,0 +1,30 @@
+body
+  padding: 0px
+  font: 18px "Lucida Grande", Helvetica, Arial, sans-serif
+
+a
+  color: #00B7FF
+
+td
+  width: 75px
+  height: 75px
+  text-align: center
+  cursor: pointer
+  font-size: 50px
+
+table
+  margin: 0 auto
+  border-collapse: collapse
+  background: white
+
+td:not(.selected):hover
+  background: cornflowerblue !important
+
+tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd)
+  background: darkgreen
+
+.selected
+  background: midnightblue !important
+
+.validMove
+  background: orange !important
