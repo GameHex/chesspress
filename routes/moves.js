@@ -5,7 +5,7 @@ var express = require('express');
 var router = express.Router();
 
 function movePiece(board, pos, dest) {
-    
+
     // TODO: refactor into ChessBoard method
     if (!board[parseInt(pos.y)][parseInt(pos.x)].isEmpty) {
         let moves = classes.PieceFactory.getPiece(board[parseInt(pos.y)][parseInt(pos.x)].piece, 'white', {
@@ -26,7 +26,6 @@ function movePiece(board, pos, dest) {
         });
 
         if (canMove) {
-            let tempPosPiece = board[parseInt(pos.y)][parseInt(pos.x)];
             let tempDestPiece = board[parseInt(dest.y)][parseInt(dest.x)];
 
             // swap the pieces but maintain the original id and pos
