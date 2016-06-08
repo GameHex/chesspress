@@ -175,6 +175,7 @@ allPieces["pawn"] = function(color, pos) { return new Pawn(color, pos); };
 class Rook extends Piece {
     constructor(color, pos) {
         super(color, pos, color === 'white' ? '♖' : '♜', 'R', 'rook');
+        this.hasMoved = false;
     }
 
     getValidMoves(board) {
@@ -346,6 +347,7 @@ allPieces["queen"] = function(color, pos) { return new Queen(color, pos); };
 class King extends Piece {
     constructor(color, pos) {
         super(color, pos, color === 'white' ? '♔' : '♚', 'K', 'king');
+        this.hasMoved = false;
     }
 
     getValidMoves(board) {
