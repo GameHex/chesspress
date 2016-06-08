@@ -319,7 +319,24 @@ class King extends Piece {
     }
 
     getValidMoves(board, piece) {
+        let moves = [];
+        let pos = this.pos;
+        let blocked = {N: false, E: false, S: false, W: false};
 
+        function checkAndMove(direction, x, y, color) {
+            if (!blocked[direction] && ChessBoard.isInBoard(x, y)) {
+                if (!board[y][x].isEmpty) {
+                    if (board[y][x].color !== color) {
+                        moves.push(`${x}-${y}`);
+                        blocked[direction] = true;
+                    } else {
+                        blocked[direction] = true;
+                    }
+                } else {
+                    moves.push(`${x}-${y}`);
+                }
+            }
+        }
     }
 }
 
