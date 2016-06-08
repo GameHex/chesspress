@@ -5,6 +5,8 @@ var express = require('express');
 var router = express.Router();
 
 function movePiece(board, pos, dest) {
+    
+    // TODO: refactor into ChessBoard method
     if (!board[parseInt(pos.y)][parseInt(pos.x)].isEmpty) {
         let moves = classes.PieceFactory.getPiece(board[parseInt(pos.y)][parseInt(pos.x)].piece, 'white', {
             x: parseInt(pos.x),

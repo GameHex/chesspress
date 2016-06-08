@@ -21,6 +21,7 @@ class ChessBoard {
         return this.board;
     }
 
+    // simple check if any space is inside the board
     static isInBoard(x, y) {
         return x < 8 && y < 8 && x >= 0 && y >= 0;
     }
@@ -33,6 +34,7 @@ class ChessBoard {
             for (let j = 0; j < 8; j++){
                 let space = board[i][j];
 
+                // create all pieces as objects based on initial character board
                 switch (space) {
                     case 'p':
                         newBoard[i][j] = new Pawn('white', {x: j, y: i});
@@ -389,6 +391,7 @@ class King extends Piece {
 module.exports.King = King;
 allPieces["king"] = function(color, pos) { return new King(color, pos); };
 
+// EmptySpace Class Declaration
 class EmptySpace {
     constructor(pos) {
         this.pos = pos;
@@ -403,6 +406,7 @@ class EmptySpace {
 
 module.exports.EmptySpace = EmptySpace;
 
+// necessary because session won't store ES6 Class functions
 class PieceFactory {
     getPiece(type, color, pos) {
         return new allPieces[type](color, pos);
