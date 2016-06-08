@@ -305,23 +305,10 @@ class Queen extends Piece {
         super(color, pos, color === 'white' ? '♕' : '♛', 'Q', 'queen');
     }
 
-    getValidMoves(board, piece) {
-
-    }
-}
-
-module.exports.Queen = Queen;
-allPieces["queen"] = function(color, pos) { return new Queen(color, pos); };
-
-class King extends Piece {
-    constructor(color, pos) {
-        super(color, pos, color === 'white' ? '♔' : '♚', 'K', 'king');
-    }
-
-    getValidMoves(board, piece) {
+    getValidMoves(board) {
         let moves = [];
         let pos = this.pos;
-        let blocked = {N: false, E: false, S: false, W: false};
+        let blocked = {N: false, E: false, S: false, W: false, NW: false, NE: false, SW: false, SE: false};
 
         function checkAndMove(direction, x, y, color) {
             if (!blocked[direction] && ChessBoard.isInBoard(x, y)) {
@@ -337,6 +324,33 @@ class King extends Piece {
                 }
             }
         }
+
+        for (let i = 1; i < 8; i++) {
+            checkAndMove('NW', pos.x - i, pos.y + i, this.color);
+            checkAndMove('NE', pos.x + i, pos.y + i, this.color);
+            checkAndMove('SW', pos.x - i, pos.y - i, this.color);
+            checkAndMove('SE', pos.x + i, pos.y - i, this.color);
+            checkAndMove('N', pos.x, pos.y + i, this.color);
+            checkAndMove('E', pos.x + i, pos.y, this.color);
+            checkAndMove('S', pos.x, pos.y - i, this.color);
+            checkAndMove('W', pos.x - i, pos.y, this.color);
+        }
+
+        return moves;
+    }
+}
+
+module.exports.Queen = Queen;
+allPieces["queen"] = function(color, pos) { return new Queen(color, pos); };
+
+class King extends Piece {
+    constructor(color, pos) {
+        super(color, pos, color === 'white' ? '♔' : '♚', 'K', 'king');
+    }
+
+    getValidMoves(board) {
+        let moves = [];
+        let pos = this.pos;
     }
 }
 
