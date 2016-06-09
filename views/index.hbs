@@ -2,15 +2,18 @@
 <script src="javascripts/vendor/handlebars-v4.0.5.js"></script>
 <script src="javascripts/index_page.js"></script>
 <script id="entry-template" type="text/x-handlebars-template">
-    \{{#each board as |row i|}}
+    \{{#each games as |game i|}}
     <tr>
-        \{{#each row as |space j|}}
-        <td id=\{{space.id}} onclick="selectSpace('\{{space.id}}', \{{space.pos.x}}, \{{space.pos.y}}, \{{space.isEmpty}})">\{{space.icon}}</td>
-        \{{/each}}
+        <td>\{{game.name}}</td>
+        <td><button onclick="joinGame(\{{game.id}})">Join</button></td>
     </tr>
     \{{/each}}
 </script>
 
 <h1>{{title}}</h1>
-<table id="chessTable" border="1">
-</table>
+<p>Select or create a new game</p>
+
+<button id="newGame" onclick="newGame()">New Game</button>
+
+<table id="gameList" border="1"></table>
+<button id="refresh" onclick="refreshGames()">Refresh Game List</button>

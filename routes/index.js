@@ -17,6 +17,8 @@ let newBoard = [
 
 let board = new classes.ChessBoard(newBoard);
 
+let games = [];
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
     session = req.session;
@@ -27,6 +29,21 @@ router.get('/', function(req, res, next) {
 
 router.get('/board', function(req, res, next) {
    res.send(req.session.board);
+});
+
+router.get('/game', function(req, res, next) {
+    session = req.session;
+    session.board = board.getBoard();
+    res.render('game', {title: 'Chesspress', board: session.board })
+});
+
+router.post('/game', function(req, res, next) {
+    session = req.session;
+    session.board = board.getBoard();
+});
+
+router.get('/game', function(req, res, next) {
+    res.send(games);
 });
 
 

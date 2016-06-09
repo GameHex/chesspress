@@ -1,22 +1,35 @@
-var board = [];
-var clicked = '';
-var clickedPos = {};
-var moves = [];
+var games = [];
 var source;
 var template;
 
-function showValidMoves(data) {
-    if (moves.length > 0) {
-        moves.forEach(function(space) {
-            $('#' + space).removeClass('validMove');
-        })
-    }
-
-    data.forEach(function(space) {
-        $('#' + space).addClass('validMove');
+function refreshGames() {
+    $.ajax({
+        type: 'GET',
+        url: '/games',
+        dataType: 'json',
+        success: function(data){
+            games = data;
+            $('#gameList').html(template({games: data}));
+        },
+        error: function(xhr, type){
+            return xhr;
+        }
     });
+}
 
-    moves = data;
+function newGame() {
+    $.ajax({
+        type: 'POST',
+        url: '/game',
+        dataType: 'json',
+        success: function(data){
+            games = data;
+            $('#gameList').html(template({games: data}));
+        },
+        error: function(xhr, type){
+            return xhr;
+        }
+    });
 }
 
 $(document).ready(function() {
@@ -28,68 +41,14 @@ $(document).ready(function() {
     // query the board endpoint for the initial board
     $.ajax({
         type: 'GET',
-        url: '/board',
+        url: '/games',
         dataType: 'json',
         success: function(data){
-            board = data;
-            $('#chessTable').html(template({board: data}));
+            games = data;
+            $('#gameList').html(template({games: data}));
         },
         error: function(xhr, type){
             return xhr;
         }
     });
 });
-
-
-function selectSpace(id, x, y, isEmpty) {
-
-    // we know to move a piece if there are valid moves and it's an empty space
-    if (moves.length > 0 && isEmpty) {
-        var dat = {from: clickedPos, to: {x: x, y: y}};
-
-        $.ajax({
-            type: 'POST',
-            url: '/moves/move',
-            data: dat,
-            dataType: 'json',
-            success: function(data){
-                if (data.board) {
-                    moves = [];
-                    $('#chessTable').html(template({board: data.board}));
-                } else if (data.moves) {
-                    showValidMoves(data.moves);
-                }
-
-            },
-            error: function(xhr, type){
-                return xhr;
-            }
-        });
-    }
-
-    // get a list of valid moves to show if a non-empty square is clicked
-    if (!isEmpty) {
-        if (clicked !== '') {
-            $('#' + clicked).removeClass('selected');
-        }
-
-        $('#' + id).addClass('selected');
-        clicked = id;
-        clickedPos = {x: x, y: y};
-
-        $.ajax({
-            type: 'POST',
-            url: '/moves',
-            data: {x: x, y: y},
-            dataType: 'json',
-            success: function(data){
-                showValidMoves(data);
-                $('#' + id).removeClass('validMove');
-            },
-            error: function(xhr, type){
-                return xhr;
-            }
-        });
-    }
-
-}
