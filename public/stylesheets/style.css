@@ -46,4 +46,7 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
 .validMove {
   box-shadow: inset 30px -30px 100px darkorange !important; }
 
+.invalid {
+  border: 2px solid darkred; }
+
 /*# sourceMappingURL=style.css.map */

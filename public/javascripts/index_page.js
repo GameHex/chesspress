@@ -18,19 +18,45 @@ function refreshGames() {
 }
 
 function newGame() {
-    $.ajax({
-        type: 'POST',
-        data: {name: $('#player').val()},
-        url: '/game',
-        dataType: 'json',
-        success: function(data){
-            games = data;
-            $('#gameList').html(template({games: data}));
-        },
-        error: function(xhr, type){
-            return xhr;
-        }
-    });
+    if (document.getElementById('player').validity.valid) {
+        $('#player').removeClass('invalid');
+        $.ajax({
+            type: 'POST',
+            data: {name: $('#player').val()},
+            url: '/game',
+            dataType: 'json',
+            success: function(data){
+                games = data;
+                $('#gameList').html(template({games: data}));
+            },
+            error: function(xhr, type){
+                return xhr;
+            }
+        });
+    } else {
+        $('#player').addClass('invalid');
+    }
+}
+
+function joinGame(uuid) {
+    if (document.getElementById('player').validity.valid) {
+        $('#player').removeClass('invalid');
+        $.ajax({
+            type: 'POST',
+            data: {name: $('#player').val()},
+            url: '/game',
+            dataType: 'json',
+            success: function(data){
+                games = data;
+                $('#gameList').html(template({games: data}));
+            },
+            error: function(xhr, type){
+                return xhr;
+            }
+        });
+    } else {
+        $('#player').addClass('invalid');
+    }
 }
 
 $(document).ready(function() {

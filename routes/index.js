@@ -17,6 +17,7 @@ let newBoard = [
     ['r','n','b','q','k','b','n','r'] ];
 
 let games = [];
+let boards = [];
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
