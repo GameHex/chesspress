@@ -9,7 +9,7 @@ h1 {
   margin: 25px auto;
   text-align: center; }
 
-td {
+td .space {
   width: 75px;
   height: 75px;
   text-align: center;
@@ -21,11 +21,24 @@ table {
   border-collapse: collapse;
   background: white; }
 
+fieldset {
+  width: 400px; }
+
 td:not(.selected):hover {
   background: cornflowerblue !important; }
 
 tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
   background: rgba(0, 100, 0, 0.95); }
+
+.centered {
+  margin: 25px auto;
+  text-align: center; }
+
+.gameTable {
+  font-size: 20px !important; }
+
+.padded {
+  padding: 20px; }
 
 .selected {
   background: midnightblue !important; }

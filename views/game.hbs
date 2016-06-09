@@ -5,7 +5,7 @@
     \{{#each board as |row i|}}
     <tr>
         \{{#each row as |space j|}}
-        <td id=\{{space.id}} onclick="selectSpace('\{{space.id}}', \{{space.pos.x}}, \{{space.pos.y}}, \{{space.isEmpty}})">\{{space.icon}}</td>
+        <td id=\{{space.id}} class="space" onclick="selectSpace('\{{space.id}}', \{{space.pos.x}}, \{{space.pos.y}}, \{{space.isEmpty}})">\{{space.icon}}</td>
         \{{/each}}
     </tr>
     \{{/each}}

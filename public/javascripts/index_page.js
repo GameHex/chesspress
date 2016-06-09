@@ -20,6 +20,7 @@ function refreshGames() {
 function newGame() {
     $.ajax({
         type: 'POST',
+        data: {name: $('#player').val()},
         url: '/game',
         dataType: 'json',
         success: function(data){

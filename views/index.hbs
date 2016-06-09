@@ -2,18 +2,31 @@
 <script src="javascripts/vendor/handlebars-v4.0.5.js"></script>
 <script src="javascripts/index_page.js"></script>
 <script id="entry-template" type="text/x-handlebars-template">
-    \{{#each games as |game i|}}
-    <tr>
-        <td>\{{game.name}}</td>
-        <td><button onclick="joinGame(\{{game.id}})">Join</button></td>
-    </tr>
-    \{{/each}}
+    \{{#if games}}
+        \{{#each games as |game i|}}
+        <tr>
+            <td>\{{game.name}}</td>
+            <td><button onclick="joinGame(\{{game.id}})">Join</button></td>
+        </tr>
+        \{{/each}}
+
+    \{{else}}
+        <p class="padded">No games yet!</p>
+    \{{/if}}
 </script>
 
 <h1>{{title}}</h1>
-<p>Select or create a new game</p>
+<br />
+<fieldset class="centered">
+    <legend>Select or create a new game</legend>
 
-<button id="newGame" onclick="newGame()">New Game</button>
+    <br />
+    <label for="player">Name: </label><input id="player" name="player" type="text" required />
 
-<table id="gameList" border="1"></table>
-<button id="refresh" onclick="refreshGames()">Refresh Game List</button>
+    <br /><br />
+    <table id="gameList" class="gameTable" border="1"></table>
+    <br />
+    <button id="newGame" onclick="newGame()">New Game</button>
+    <button id="refresh" onclick="refreshGames()">Refresh Game List</button>
+    <br /><br />
+</fieldset>
