@@ -17,7 +17,7 @@ let newBoard = [
     ['r','n','b','q','k','b','n','r'] ];
 
 let games = [];
-let boards = [];
+let boards = new Map();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -36,10 +36,14 @@ router.get('/game', function(req, res, next) {
 router.post('/game', function(req, res, next) {
     let board = new classes.ChessBoard(newBoard);
     let game = {name: `${req.body.name}'s game`, id: uuid.v1()};
+
     games.push(game);
     session = req.session;
-    session.board = board.getBoard();
-    res.send(games)
+    session.uuid = game.id;
+
+    boards.set(game.id, board);
+
+    res.send(games);
 });
 
 router.get('/games', function(req, res, next) {
