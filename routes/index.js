@@ -16,8 +16,14 @@ let newBoard = [
     ['p','p','p','p','p','p','p','p'],
     ['r','n','b','q','k','b','n','r'] ];
 
+// the games will be just an array
 let games = [];
+
+// the boards will be a Map, which is new to ES6
+// This will let the board be stored with its classes and accessed by the session's uuid
 let boards = new Map();
+
+module.exports.boards = boards;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -35,7 +41,7 @@ router.get('/game', function(req, res, next) {
 
 router.post('/game', function(req, res, next) {
     let board = new classes.ChessBoard(newBoard);
-    let game = {name: `${req.body.name}'s game`, id: uuid.v1()};
+    let game =  {name: `${req.body.name}'s game`, id: uuid.v1(), joinable: true };
 
     games.push(game);
     session = req.session;
@@ -48,6 +54,11 @@ router.post('/game', function(req, res, next) {
 
 router.get('/games', function(req, res, next) {
     res.send(games);
+});
+
+router.pos('/join', function(req, res, next) {
+    req.session.uuid = req.body.uuid;
+    res.send(true);
 });
 
 
