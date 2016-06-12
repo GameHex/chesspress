@@ -56,7 +56,7 @@ router.get('/games', function(req, res, next) {
     res.send(games);
 });
 
-router.pos('/join', function(req, res, next) {
+router.post('/join', function(req, res, next) {
     req.session.uuid = req.body.uuid;
     res.send(true);
 });
