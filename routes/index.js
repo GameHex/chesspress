@@ -6,6 +6,7 @@ var router = express.Router();
 var uuid = require('node-uuid');
 var session;
 
+// a visual representation of the board setup to allow for alternate starting boards
 let newBoard = [
     ['R','N','B','Q','K','B','N','R'],
     ['P','P','P','P','P','P','P','P'],
@@ -21,9 +22,7 @@ let games = [];
 
 // the boards will be a Map, which is new to ES6
 // This will let the board be stored with its classes and accessed by the session's uuid
-let boards = new Map();
-
-module.exports.boards = boards;
+router.boards = new Map();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -31,12 +30,14 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/board', function(req, res, next) {
-   res.send(req.session.board);
+    let board = router.boards.get(req.session.uuid).board;
+    res.send(board);
 });
 
 router.get('/game', function(req, res, next) {
     session = req.session;
-    res.render('game', {title: 'Chesspress', board: session.board })
+    let board = router.boards.get(session.uuid);
+    res.render('game', {title: 'Chesspress', board: board })
 });
 
 router.post('/game', function(req, res, next) {
@@ -44,10 +45,8 @@ router.post('/game', function(req, res, next) {
     let game =  {name: `${req.body.name}'s game`, id: uuid.v1(), joinable: true };
 
     games.push(game);
-    session = req.session;
-    session.uuid = game.id;
-
-    boards.set(game.id, board);
+    req.session.uuid = game.id;
+    router.boards.set(game.id, board);
 
     res.send(games);
 });
@@ -57,8 +56,9 @@ router.get('/games', function(req, res, next) {
 });
 
 router.post('/join', function(req, res, next) {
-    req.session.uuid = req.body.uuid;
-    res.send(true);
+    req.session.uuid = req.body.id;
+    console.log(req.session.uuid);
+    res.send({canJoin: true});
 });
 
 

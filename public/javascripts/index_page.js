@@ -25,6 +25,9 @@ function newGame() {
             data: {name: $('#player').val()},
             url: '/game',
             dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
             success: function(data){
                 games = data;
                 $('#gameList').html(template({games: data}));
@@ -43,12 +46,16 @@ function joinGame(uuid) {
         $('#player').removeClass('invalid');
         $.ajax({
             type: 'POST',
-            data: {name: $('#player').val()},
-            url: '/game',
+            data: {id: uuid},
+            url: '/join',
             dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
             success: function(data){
-                games = data;
-                $('#gameList').html(template({games: data}));
+                if (data.canJoin) {
+                    window.location = "/game";
+                }
             },
             error: function(xhr, type){
                 return xhr;
