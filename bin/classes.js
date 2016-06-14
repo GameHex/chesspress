@@ -150,7 +150,7 @@ class Pawn extends Piece {
             }
         }
 
-        // TODO: finish pawn checks
+        // TODO: program en passant
         if (this.color === 'black') {
             if (pos.y < 7) {
                 console.log(board[pos.y + 1][pos.x]);
@@ -161,6 +161,19 @@ class Pawn extends Piece {
                 if (pos.y === 1 && board[pos.y + 1][pos.x].isEmpty) {
                     if (board[pos.y + 2][pos.x].isEmpty) {
                         moves.push(`${pos.x}-${pos.y + 2}`);
+                    }
+                }
+
+                // check if the diagonals contain a piece to take
+                if (ChessBoard.isInBoard(pos.y + 1, pos.x + 1)) {
+                    if (board[pos.y + 1][pos.x + 1].color === 'white') {
+                        moves.push(`${pos.x + 1}-${pos.y + 1}`);
+                    }
+                }
+
+                if (ChessBoard.isInBoard(pos.y + 1, pos.x - 1)) {
+                    if (board[pos.y + 1][pos.x - 1].color === 'white') {
+                        moves.push(`${pos.x - 1}-${pos.y + 1}`);
                     }
                 }
             }
