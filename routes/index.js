@@ -29,36 +29,47 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Chesspress', games: router.games });
 });
 
+/* GET retrieves most current version of board. */
 router.get('/board', function(req, res, next) {
     let board = router.boards.get(req.session.uuid).board;
     res.send(board);
 });
 
+/* GET renders game page with session board. */
 router.get('/game', function(req, res, next) {
     session = req.session;
     let board = router.boards.get(session.uuid);
     res.render('game', {title: 'Chesspress', board: board })
 });
 
+/* POST creates a new game. */
 router.post('/game', function(req, res, next) {
+    // When creating a new game, we need a new board, player, and game
     let board = new classes.ChessBoard(newBoard);
     let player = new classes.Player('white', req.body.name);
     let game =  {name: `${req.body.name}'s game`, id: uuid.v1(), joinable: true, players: {white: player}};
 
     router.games.push(game);
     req.session.uuid = game.id;
+    req.session.player = player;
     router.boards.set(game.id, board);
+
+    //TODO: on client, automatically redirect to game after response
 
     res.send(router.games);
 });
 
+/* GET retrieves list of active games on server. */
 router.get('/games', function(req, res, next) {
     res.send(router.games);
 });
 
+/* POST joins a game based on uuid. */
 router.post('/join', function(req, res, next) {
     req.session.uuid = req.body.id;
     console.log(req.session.uuid);
+    // TODO: set game's joinable to false
+
     res.send({canJoin: true});
 });
 
