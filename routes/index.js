@@ -4,7 +4,6 @@ const classes = require('../bin/classes.js');
 var express = require('express');
 var router = express.Router();
 var uuid = require('node-uuid');
-var session;
 
 // a visual representation of the board setup to allow for alternate starting boards
 let newBoard = [
@@ -37,9 +36,11 @@ router.get('/board', function(req, res, next) {
 
 /* GET renders game page with session board. */
 router.get('/game', function(req, res, next) {
-    session = req.session;
+    let session = req.session;
     let board = router.boards.get(session.uuid);
-    res.render('game', {title: 'Chesspress', board: board, playerColor: `player${session.player.color}` })
+    let game = router.games.find(game => game.id === session.uuid);
+    console.log(game);
+    res.render('game', {title: game.name, board: board, playerColor: `player${session.player.color}` })
 });
 
 /* POST creates a new game. */
