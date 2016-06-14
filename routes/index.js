@@ -54,8 +54,6 @@ router.post('/game', function(req, res, next) {
     req.session.player = player;
     router.boards.set(game.id, board);
 
-    //TODO: on client, automatically redirect to game after response
-
     res.send(router.games);
 });
 

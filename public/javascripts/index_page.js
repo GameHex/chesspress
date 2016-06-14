@@ -31,6 +31,7 @@ function newGame() {
             success: function(data){
                 games = data;
                 $('#gameList').html(template({games: data}));
+                window.location = "/game";
             },
             error: function(xhr, type){
                 return xhr;
@@ -66,17 +67,23 @@ function joinGame(uuid) {
     }
 }
 
-$(document).ready(function() {
-
+function initPage() {
     // get and compile the template source on document ready
     source   = $("#entry-template").html();
     template = Handlebars.compile(source);
+
+    // reset player name on reload
+    $('#player').val("");
 
     // query the board endpoint for the initial board
     $.ajax({
         type: 'GET',
         url: '/games',
         dataType: 'json',
+        cache:false,
+        xhrFields: {
+            withCredentials: true
+        },
         success: function(data){
             games = data;
             $('#gameList').html(template({games: data}));
@@ -85,4 +92,8 @@ $(document).ready(function() {
             return xhr;
         }
     });
+}
+
+$(document).ready(function() {
+    initPage();
 });
