@@ -49,11 +49,11 @@ router.post('/game', function(req, res, next) {
     req.session.uuid = game.id;
     router.boards.set(game.id, board);
 
-    res.send(games);
+    res.send(router.games);
 });
 
 router.get('/games', function(req, res, next) {
-    res.send(games);
+    res.send(router.games);
 });
 
 router.post('/join', function(req, res, next) {
