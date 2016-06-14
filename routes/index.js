@@ -39,7 +39,7 @@ router.get('/board', function(req, res, next) {
 router.get('/game', function(req, res, next) {
     session = req.session;
     let board = router.boards.get(session.uuid);
-    res.render('game', {title: 'Chesspress', board: board })
+    res.render('game', {title: 'Chesspress', board: board, playerColor: `player${session.player.color}` })
 });
 
 /* POST creates a new game. */
