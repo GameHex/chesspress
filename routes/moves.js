@@ -10,10 +10,7 @@ function movePiece(board, pos, dest) {
 
     // TODO: refactor into ChessBoard method
     if (!board[parseInt(pos.y)][parseInt(pos.x)].isEmpty) {
-        let moves = classes.PieceFactory.getPiece(board[parseInt(pos.y)][parseInt(pos.x)].piece, 'white', {
-            x: parseInt(pos.x),
-            y: parseInt(pos.y)
-        }).getValidMoves(board);
+        let moves = board[parseInt(pos.y)][parseInt(pos.x)].getValidMoves(board);
         let canMove = false;
 
         moves.forEach((move) => {
@@ -53,7 +50,7 @@ router.post('/', function(req, res, next) {
     let x = parseInt(req.body.x);
     let y = parseInt(req.body.y);
 
-    let moves = classes.PieceFactory.getPiece(board[y][x].piece, 'white', {x: x, y: y}).getValidMoves(board);
+    let moves = board[y][x].getValidMoves(board);
     res.send(moves);
 });
 

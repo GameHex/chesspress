@@ -100,7 +100,7 @@ class Piece {
         this.available = true;
         this.icon = icon;
         this.identifier = '';
-        this.id = pos.x + '-' + pos.y;
+        this.id = `${pos.x}-${pos.y}`;
         this.piece = piece;
         this.isEmpty = false;
     }
@@ -201,10 +201,10 @@ class Rook extends Piece {
         }
 
         for (let i = 1; i < 8; i++) {
-            checkAndMove('N', pos.x, pos.y + i, this.color);
-            checkAndMove('E', pos.x + i, pos.y, this.color);
-            checkAndMove('S', pos.x, pos.y - i, this.color);
-            checkAndMove('W', pos.x - i, pos.y, this.color);
+            checkAndMove('N', +pos.x, +pos.y + i, this.color);
+            checkAndMove('E', +pos.x + i, +pos.y, this.color);
+            checkAndMove('S', +pos.x, +pos.y - i, this.color);
+            checkAndMove('W', +pos.x - i, +pos.y, this.color);
         }
 
         return moves;
@@ -227,14 +227,14 @@ class Knight extends Piece {
 
         // array of all moves a knight can make
         let moveCombos = [
-            {x: pos.x + 2, y: pos.y + 1},
-            {x: pos.x + 2, y: pos.y - 1},
-            {x: pos.x - 2, y: pos.y + 1},
-            {x: pos.x - 2, y: pos.y - 1},
-            {x: pos.x + 1, y: pos.y + 2},
-            {x: pos.x + 1, y: pos.y - 2},
-            {x: pos.x - 1, y: pos.y + 2},
-            {x: pos.x - 1, y: pos.y - 2}
+            {x: +pos.x + 2, y: +pos.y + 1},
+            {x: +pos.x + 2, y: +pos.y - 1},
+            {x: +pos.x - 2, y: +pos.y + 1},
+            {x: +pos.x - 2, y: +pos.y - 1},
+            {x: +pos.x + 1, y: +pos.y + 2},
+            {x: +pos.x + 1, y: +pos.y - 2},
+            {x: +pos.x - 1, y: +pos.y + 2},
+            {x: +pos.x - 1, y: +pos.y - 2}
         ];
 
         if (this.color === 'white') {
@@ -251,7 +251,7 @@ class Knight extends Piece {
             moveCombos.forEach((move) => {
                 if (ChessBoard.isInBoard(move.x, move.y)) {
                     if (board[move.y][move.x].isEmpty || board[move.y][move.x].color === 'white') {
-                        moves.push(`${pos.x}-${pos.y}`);
+                        moves.push(`${move.x}-${move.y}`);
                     }
                 }
             });
@@ -290,10 +290,10 @@ class Bishop extends Piece {
         }
 
         for (let i = 1; i < 8; i++) {
-            checkAndMove('NW', pos.x - i, pos.y + i, this.color);
-            checkAndMove('NE', pos.x + i, pos.y + i, this.color);
-            checkAndMove('SW', pos.x - i, pos.y - i, this.color);
-            checkAndMove('SE', pos.x + i, pos.y - i, this.color);
+            checkAndMove('NW', +pos.x - i, +pos.y + i, this.color);
+            checkAndMove('NE', +pos.x + i, +pos.y + i, this.color);
+            checkAndMove('SW', +pos.x - i, +pos.y - i, this.color);
+            checkAndMove('SE', +pos.x + i, +pos.y - i, this.color);
         }
 
         return moves;
@@ -330,14 +330,14 @@ class Queen extends Piece {
 
         // Queen moves are a combination of Bishop and Rook
         for (let i = 1; i < 8; i++) {
-            checkAndMove('NW', pos.x - i, pos.y + i, this.color);
-            checkAndMove('NE', pos.x + i, pos.y + i, this.color);
-            checkAndMove('SW', pos.x - i, pos.y - i, this.color);
-            checkAndMove('SE', pos.x + i, pos.y - i, this.color);
-            checkAndMove('N', pos.x, pos.y + i, this.color);
-            checkAndMove('E', pos.x + i, pos.y, this.color);
-            checkAndMove('S', pos.x, pos.y - i, this.color);
-            checkAndMove('W', pos.x - i, pos.y, this.color);
+            checkAndMove('NW', +pos.x - i, +pos.y + i, this.color);
+            checkAndMove('NE', +pos.x + i, +pos.y + i, this.color);
+            checkAndMove('SW', +pos.x - i, +pos.y - i, this.color);
+            checkAndMove('SE', +pos.x + i, +pos.y - i, this.color);
+            checkAndMove('N', +pos.x, +pos.y + i, this.color);
+            checkAndMove('E', +pos.x + i, +pos.y, this.color);
+            checkAndMove('S', +pos.x, +pos.y - i, this.color);
+            checkAndMove('W', +pos.x - i, +pos.y, this.color);
         }
 
         return moves;
@@ -375,14 +375,14 @@ class King extends Piece {
         }
 
         // Kings move like lazy Queens, who can only move one space
-        checkAndMove('NW', pos.x - 1, pos.y + 1, this.color);
-        checkAndMove('NE', pos.x + 1, pos.y + 1, this.color);
-        checkAndMove('SW', pos.x - 1, pos.y - 1, this.color);
-        checkAndMove('SE', pos.x + 1, pos.y - 1, this.color);
-        checkAndMove('N', pos.x, pos.y + 1, this.color);
-        checkAndMove('E', pos.x + 1, pos.y, this.color);
-        checkAndMove('S', pos.x, pos.y - 1, this.color);
-        checkAndMove('W', pos.x - 1, pos.y, this.color);
+        checkAndMove('NW', +pos.x - 1, +pos.y + 1, this.color);
+        checkAndMove('NE', +pos.x + 1, +pos.y + 1, this.color);
+        checkAndMove('SW', +pos.x - 1, +pos.y - 1, this.color);
+        checkAndMove('SE', +pos.x + 1, +pos.y - 1, this.color);
+        checkAndMove('N', +pos.x, +pos.y + 1, this.color);
+        checkAndMove('E', +pos.x + 1, +pos.y, this.color);
+        checkAndMove('S', +pos.x, +pos.y - 1, this.color);
+        checkAndMove('W', +pos.x - 1, +pos.y, this.color);
 
         return moves;
     }
@@ -395,7 +395,7 @@ allPieces["king"] = function(color, pos) { return new King(color, pos); };
 class EmptySpace {
     constructor(pos) {
         this.pos = pos;
-        this.id = pos.x + '-' + pos.y;
+        this.id = `${pos.x}-${pos.y}`;
         this.isEmpty = true;
     }
 
@@ -405,12 +405,3 @@ class EmptySpace {
 }
 
 module.exports.EmptySpace = EmptySpace;
-
-// necessary because session won't store ES6 Class functions
-class PieceFactory {
-    getPiece(type, color, pos) {
-        return new allPieces[type](color, pos);
-    }
-}
-
-module.exports.PieceFactory = new PieceFactory();
