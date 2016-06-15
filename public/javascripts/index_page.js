@@ -1,6 +1,7 @@
 var games = [];
 var source;
 var template;
+var socket = io();
 
 function refreshGames() {
     $.ajax({
@@ -31,6 +32,7 @@ function newGame() {
             success: function(data){
                 games = data;
                 $('#gameList').html(template({games: data}));
+                socket.emit('created', $('#player').val());
                 window.location = "/game";
             },
             error: function(xhr, type){
@@ -55,6 +57,7 @@ function joinGame(uuid) {
             },
             success: function(data){
                 if (data.canJoin) {
+                    socket.emit('joined', $('#player').val(), uuid);
                     window.location = "/game";
                 }
             },
@@ -94,6 +97,12 @@ function initPage() {
     });
 }
 
+socket.on('refresh game list', function(data){
+    games = data;
+    $('#gameList').html(template({games: data}));
+});
+
 $(document).ready(function() {
     initPage();
 });
+

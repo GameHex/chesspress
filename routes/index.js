@@ -45,6 +45,7 @@ router.get('/game', function(req, res, next) {
 
 /* POST creates a new game. */
 router.post('/game', function(req, res, next) {
+
     // When creating a new game, we need a new board, player, and game
     let board = new classes.ChessBoard(newBoard);
     let player = new classes.Player('white', req.body.name);
@@ -67,10 +68,34 @@ router.get('/games', function(req, res, next) {
 router.post('/join', function(req, res, next) {
     req.session.uuid = req.body.id;
     console.log(req.session.uuid);
-    // TODO: set game's joinable to false
+
+    let gameIndex = router.games.findIndex(game => game.id === req.session.uuid);
+
+
+
+    router.games[gameIndex].joinable = false;
+
 
     res.send({canJoin: true});
 });
 
+module.exports = function(io) {
+    io.on('connection', function(socket){
+        console.log('a user connected');
+        io.emit('refresh game list', router.games);
 
-module.exports = router;
+        socket.on('created', function(player){
+            console.log(`${player} created a game.`);
+            io.emit('refresh game list', router.games);
+        });
+
+        socket.on('joined', function(player, uuid){
+            console.log(`${player} joined game ${uuid}.`);
+            io.emit('refresh game list', router.games);
+        });
+    });
+
+    return router;
+};
+
+module.exports.router = router;

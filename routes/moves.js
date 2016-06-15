@@ -4,7 +4,7 @@ const classes = require('../bin/classes.js');
 var express = require('express');
 var router = express.Router();
 var index = require('./index.js');
-var boards = index.boards;
+var boards = index.router.boards;
 
 function movePiece(board, pos, dest) {
 
@@ -46,6 +46,7 @@ function movePiece(board, pos, dest) {
 
 /* gets moves for a piece */
 router.post('/', function(req, res, next) {
+    console.log(req.session.uuid);
     let board = boards.get(req.session.uuid).board;
     let x = parseInt(req.body.x);
     let y = parseInt(req.body.y);
@@ -56,6 +57,7 @@ router.post('/', function(req, res, next) {
 
 /* moves a piece */
 router.post('/move', function(req, res, next) {
+    console.log(req.session.uuid);
     let newBoard = movePiece(boards.get(req.session.uuid).board, req.body.from, req.body.to);
 
     if (newBoard.board) {
@@ -65,4 +67,15 @@ router.post('/move', function(req, res, next) {
     res.send(newBoard);
 });
 
-module.exports = router;
+module.exports = function(io) {
+    io.on('connection', function(socket){
+        console.log('a user connected');
+
+        socket.on('moved', function(player){
+            console.log(`${player} made a move.`);
+            io.emit('refresh board', boards.get(req.session.uuid).board);
+        });
+    });
+
+    return router;
+};
