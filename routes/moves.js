@@ -5,6 +5,7 @@ var express = require('express');
 var router = express.Router();
 var index = require('./index.js');
 var boards = index.router.boards;
+var games = index.router.games;
 
 function movePiece(board, pos, dest) {
 
@@ -68,11 +69,23 @@ router.post('/move', function(req, res, next) {
 });
 
 module.exports = function(io) {
-    io.on('connection', function(socket){
-        console.log('a user connected');
+    io.on('connection', (socket) => {
+        console.log('a user connected to the moves route');
+
+        socket.on('disconnect', function() {
+            console.log(socket.request.session.uuid);
+            console.log(`${socket.request.session.player.name} got disconnected!`);
+            let gameIndex = games.findIndex(game => game.id === socket.request.session.uuid);
+            let player = socket.request.session.player;
+
+            if (games.length > 0 && gameIndex > -1) {
+                games[gameIndex].players[player.color] = undefined;
+
+            }
+        });
 
         socket.on('moved', function(player){
-            console.log(`Someone made a move.`);
+            console.log(`${socket.request.session.player.name} made a move.`);
             io.emit('refresh board');
         });
     });
