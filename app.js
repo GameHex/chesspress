@@ -41,6 +41,21 @@ io.sockets.on('connection', function (socket) {
   console.log("user connected");
 });
 
+var fStore = new Filestore;
+
+var sessionMiddleware = session({
+  store: fStore,
+  secret: "chesspress",
+  resave: true,
+  saveUninitialized: true
+});
+
+io.use(function(socket, next) {
+  sessionMiddleware(socket.request, socket.request.res, next);
+});
+
+// session setup
+app.use(sessionMiddleware);
 
 var routes = require('./routes/index')(io);
 var moves = require('./routes/moves')(io);
@@ -65,14 +80,6 @@ app.use(require('node-sass-middleware')({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('trust proxy', 1);
-
-// session setup
-app.use(session({
-  store: new Filestore,
-  secret: "chesspress",
-  resave: true,
-  saveUninitialized: true
-}));
 
 app.use('/', routes);
 app.use('/moves', moves);
