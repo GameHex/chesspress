@@ -48,8 +48,10 @@ router.post('/game', function(req, res, next) {
 
     // When creating a new game, we need a new board, player, and game
     let board = new classes.ChessBoard(newBoard);
-    let game =  {name: `${req.body.name}'s game`, id: uuid.v1(), joinable: true, players: {white: player}};
-    let player = new classes.Player('white', req.body.name, game.id);
+    let newID = uuid.v1();
+    let player = new classes.Player('white', req.body.name, newID);
+
+    let game =  {name: `${req.body.name}'s game`, id: newID, joinable: true, players: {white: player}};
 
     router.games.push(game);
     req.session.uuid = game.id;
@@ -70,14 +72,20 @@ router.post('/join', function(req, res, next) {
     console.log(req.session.uuid);
 
     let gameIndex = router.games.findIndex(game => game.id === req.session.uuid);
-    let color = router.games[gameIndex].players.white ? 'black' : 'white';
-    let player = new classes.Player(color, req.body.name, req.session.uuid);
 
-    req.session.player = player;
-    router.games[gameIndex].players[color] = player;
-    router.games[gameIndex].joinable = false;
+    if (router.games[gameIndex].joinable) {
+        let color = router.games[gameIndex].players.white ? 'black' : 'white';
+        let player = new classes.Player(color, req.body.name, req.session.uuid);
 
-    res.send({canJoin: true});
+        req.session.player = player;
+        router.games[gameIndex].players[color] = player;
+        router.games[gameIndex].joinable = false;
+
+        res.send({canJoin: true});
+    } else {
+        res.send({canJoin: false});
+    }
+
 });
 
 module.exports = function(io) {

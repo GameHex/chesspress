@@ -80,7 +80,7 @@ module.exports = function(io) {
 
             if (games.length > 0 && gameIndex > -1) {
                 games[gameIndex].players[player.color] = undefined;
-
+                games[gameIndex].canJoin = true;
             }
         });
 
