@@ -7,7 +7,7 @@
         \{{#each games as |game i|}}
         <tr>
             <td class="padded">\{{game.name}}</td>
-            <td><button class="padded" onclick="joinGame('\{{game.id}}')">Join</button></td>
+            <td><button class="padded" onclick="joinGame('\{{game.id}}')" \{{#if game.disabled}}disabled\{{/if}}>Join</button></td>
         </tr>
         \{{/each}}
 

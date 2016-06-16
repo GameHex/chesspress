@@ -51,7 +51,7 @@ router.post('/game', function(req, res, next) {
     let newID = uuid.v1();
     let player = new classes.Player('white', req.body.name, newID);
 
-    let game =  {name: `${req.body.name}'s game`, id: newID, joinable: true, players: {white: player}};
+    let game =  {name: `${req.body.name}'s game`, id: newID, disabled: false, players: {white: player}};
 
     router.games.push(game);
     req.session.uuid = game.id;
@@ -73,17 +73,17 @@ router.post('/join', function(req, res, next) {
 
     let gameIndex = router.games.findIndex(game => game.id === req.session.uuid);
 
-    if (router.games[gameIndex].joinable) {
+    if (!router.games[gameIndex].disabled) {
         let color = router.games[gameIndex].players.white ? 'black' : 'white';
         let player = new classes.Player(color, req.body.name, req.session.uuid);
 
         req.session.player = player;
         router.games[gameIndex].players[color] = player;
-        router.games[gameIndex].joinable = false;
+        router.games[gameIndex].disabled = true;
 
-        res.send({canJoin: true});
+        res.send({disabled: false});
     } else {
-        res.send({canJoin: false});
+        res.send({disabled: true});
     }
 
 });

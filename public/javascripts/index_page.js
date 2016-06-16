@@ -56,7 +56,7 @@ function joinGame(uuid) {
                 withCredentials: true
             },
             success: function(data){
-                if (data.canJoin) {
+                if (!data.disabled) {
                     socket.emit('joined', $('#player').val(), uuid);
                     window.location = "/game";
                 }
