@@ -70,9 +70,10 @@ router.post('/join', function(req, res, next) {
     console.log(req.session.uuid);
 
     let gameIndex = router.games.findIndex(game => game.id === req.session.uuid);
+    let player = new classes.Player('black', req.body.name);
 
-
-
+    req.session.player = player;
+    router.games[gameIndex].players.black = player;
     router.games[gameIndex].joinable = false;
 
 

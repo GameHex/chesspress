@@ -72,8 +72,8 @@ module.exports = function(io) {
         console.log('a user connected');
 
         socket.on('moved', function(player){
-            console.log(`${player} made a move.`);
-            io.emit('refresh board', boards.get(req.session.uuid).board);
+            console.log(`Someone made a move.`);
+            io.emit('refresh board');
         });
     });
 

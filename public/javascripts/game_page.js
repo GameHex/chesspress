@@ -4,6 +4,7 @@ var clickedPos = {};
 var moves = [];
 var source;
 var template;
+var socket = io();
 
 function showValidMoves(data) {
     if (moves.length > 0) {
@@ -19,8 +20,7 @@ function showValidMoves(data) {
     moves = data;
 }
 
-$(document).ready(function() {
-
+function refreshBoard() {
     // get and compile the template source on document ready
     source   = $("#entry-template").html();
     template = Handlebars.compile(source);
@@ -38,6 +38,10 @@ $(document).ready(function() {
             return xhr;
         }
     });
+}
+
+$(document).ready(function() {
+    refreshBoard();
 });
 
 
@@ -56,10 +60,10 @@ function selectSpace(id, x, y, isEmpty) {
                 if (data.board) {
                     moves = [];
                     $('#chessTable').html(template({board: data.board}));
+                    socket.emit('moved');
                 } else if (data.moves) {
                     showValidMoves(data.moves);
                 }
-
             },
             error: function(xhr, type){
                 return xhr;
@@ -91,5 +95,8 @@ function selectSpace(id, x, y, isEmpty) {
             }
         });
     }
-
 }
+
+socket.on('refresh board', function(){
+    refreshBoard();
+});
