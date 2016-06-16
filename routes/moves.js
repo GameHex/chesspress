@@ -73,15 +73,18 @@ module.exports = function(io) {
         console.log('a user connected to the moves route');
 
         socket.on('disconnect', function() {
-            console.log(socket.request.session.uuid);
-            console.log(`${socket.request.session.player.name} got disconnected!`);
-            let gameIndex = games.findIndex(game => game.id === socket.request.session.uuid);
-            let player = socket.request.session.player;
+            if (socket.request.session.uuid && socket.request.session.player) {
+                console.log(socket.request.session.uuid);
+                console.log(`${socket.request.session.player.name} got disconnected!`);
+                let gameIndex = games.findIndex(game => game.id === socket.request.session.uuid);
+                let player = socket.request.session.player;
 
-            if (games.length > 0 && gameIndex > -1) {
-                games[gameIndex].players[player.color] = undefined;
-                games[gameIndex].canJoin = true;
+                if (games.length > 0 && gameIndex > -1) {
+                    games[gameIndex].players[player.color] = undefined;
+                    games[gameIndex].disabled = false;
+                }
             }
+
         });
 
         socket.on('moved', function(player){
