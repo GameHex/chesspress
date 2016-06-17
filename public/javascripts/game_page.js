@@ -47,11 +47,11 @@ $(document).ready(function() {
     initBoard();
 });
 
-
 function selectSpace(id, x, y, isEmpty) {
+    var isValidMove = moves.length > 0 ? moves.indexOf(id) > -1 : false;
 
-    // we know to move a piece if there are valid moves and it's an empty space
-    if (moves.length > 0 && isEmpty) {
+    // we know to move a piece if there are valid moves
+    if (moves.length > 0 && isValidMove) {
         var dat = {from: clickedPos, to: {x: x, y: y}};
 
         $.ajax({
