@@ -52,6 +52,7 @@ router.post('/game', function(req, res, next) {
     let newID = uuid.v1();
     let player = new classes.Player('white', req.body.name, uuid.v1());
 
+    player.isMove = true;
     let game =  {name: `${req.body.name}'s game`, id: newID, disabled: false, players: {white: player}};
 
     router.games.push(game);
