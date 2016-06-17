@@ -31,7 +31,8 @@ router.get('/', function(req, res, next) {
 /* GET retrieves most current version of board. */
 router.get('/board', function(req, res, next) {
     let board = router.boards.get(req.session.uuid).board;
-    res.send(board);
+    let game = router.games.find(game => game.id === req.session.uuid);
+    res.send({board: board, game: game, player: req.session.player.color});
 });
 
 /* GET renders game page with session board. */
@@ -49,7 +50,7 @@ router.post('/game', function(req, res, next) {
     // When creating a new game, we need a new board, player, and game
     let board = new classes.ChessBoard(newBoard);
     let newID = uuid.v1();
-    let player = new classes.Player('white', req.body.name, newID);
+    let player = new classes.Player('white', req.body.name, uuid.v1());
 
     let game =  {name: `${req.body.name}'s game`, id: newID, disabled: false, players: {white: player}};
 
@@ -58,7 +59,7 @@ router.post('/game', function(req, res, next) {
     req.session.player = player;
     router.boards.set(game.id, board);
 
-    res.send(router.games);
+    res.send({game: game.id});
 });
 
 /* GET retrieves list of active games on server. */
@@ -69,13 +70,15 @@ router.get('/games', function(req, res, next) {
 /* POST joins a game based on uuid. */
 router.post('/join', function(req, res, next) {
     req.session.uuid = req.body.id;
-    console.log(req.session.uuid);
+    console.log('joined game is: ', req.session.uuid);
 
     let gameIndex = router.games.findIndex(game => game.id === req.session.uuid);
 
+    console.log('game index is: ', gameIndex);
+
     if (!router.games[gameIndex].disabled) {
         let color = router.games[gameIndex].players.white ? 'black' : 'white';
-        let player = new classes.Player(color, req.body.name, req.session.uuid);
+        let player = new classes.Player(color, req.body.name, uuid.v1());
 
         req.session.player = player;
         router.games[gameIndex].players[color] = player;
@@ -101,6 +104,7 @@ module.exports = function(io) {
         socket.on('joined', function(player, uuid){
             console.log(`${player} joined game ${uuid}.`);
             io.emit('refresh game list', router.games);
+            socket.join(uuid);
         });
     });
 

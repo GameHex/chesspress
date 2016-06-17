@@ -30,8 +30,6 @@ function newGame() {
                 withCredentials: true
             },
             success: function(data){
-                games = data;
-                $('#gameList').html(template({games: data}));
                 socket.emit('created', $('#player').val());
                 window.location = "/game";
             },
@@ -49,7 +47,7 @@ function joinGame(uuid) {
         $('#player').removeClass('invalid');
         $.ajax({
             type: 'POST',
-            data: {id: uuid},
+            data: {name:$('#player').val(), id: uuid},
             url: '/join',
             dataType: 'json',
             xhrFields: {
@@ -57,7 +55,6 @@ function joinGame(uuid) {
             },
             success: function(data){
                 if (!data.disabled) {
-                    socket.emit('joined', $('#player').val(), uuid);
                     window.location = "/game";
                 }
             },

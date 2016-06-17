@@ -2,6 +2,7 @@ var board = [];
 var clicked = '';
 var clickedPos = {};
 var moves = [];
+var game = {};
 var source;
 var template;
 var socket = io();
@@ -20,7 +21,7 @@ function showValidMoves(data) {
     moves = data;
 }
 
-function refreshBoard() {
+function initBoard() {
     // get and compile the template source on document ready
     source   = $("#entry-template").html();
     template = Handlebars.compile(source);
@@ -32,7 +33,9 @@ function refreshBoard() {
         dataType: 'json',
         success: function(data){
             board = data;
-            $('#chessTable').html(template({board: data}));
+            game = data.game;
+            $('#chessTable').html(template({board: data.board}));
+            socket.emit('joined', data.game.players[data.player].name, data.game.id);
         },
         error: function(xhr, type){
             return xhr;
@@ -41,7 +44,7 @@ function refreshBoard() {
 }
 
 $(document).ready(function() {
-    refreshBoard();
+    initBoard();
 });
 
 
@@ -97,6 +100,7 @@ function selectSpace(id, x, y, isEmpty) {
     }
 }
 
-socket.on('refresh board', function(){
-    refreshBoard();
+socket.on('refresh board', function(data){
+    $('#chessTable').html(template({board: data}));
+    game = data.game;
 });

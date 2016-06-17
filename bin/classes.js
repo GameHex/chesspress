@@ -3,10 +3,10 @@
 let allPieces = [];
 
 class Player {
-    constructor(color, name, uuid) {
+    constructor(color, name, id) {
         this.color = color;
         this.name = name;
-        this.uuid = uuid;
+        this.id = id;
         this.isMove = false;
     }
 }

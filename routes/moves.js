@@ -70,11 +70,10 @@ router.post('/move', function(req, res, next) {
 
 module.exports = function(io) {
     io.on('connection', (socket) => {
-        console.log('a user connected to the moves route');
-
         socket.on('disconnect', function() {
             if (socket.request.session.uuid && socket.request.session.player) {
                 console.log(socket.request.session.uuid);
+                console.log(socket.request.session.player);
                 console.log(`${socket.request.session.player.name} got disconnected!`);
                 let gameIndex = games.findIndex(game => game.id === socket.request.session.uuid);
                 let player = socket.request.session.player;
@@ -89,7 +88,9 @@ module.exports = function(io) {
 
         socket.on('moved', function(player){
             console.log(`${socket.request.session.player.name} made a move.`);
-            io.emit('refresh board');
+            let board = boards.get(socket.request.session.uuid).board;
+
+            io.sockets.in(socket.request.session.uuid).emit('refresh board', board);
         });
     });
 
