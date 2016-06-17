@@ -28,11 +28,11 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Chesspress', games: router.games });
 });
 
-/* GET retrieves most current version of board. */
+/* GET retrieves most current version of board. Used in the initial load of the game page */
 router.get('/board', function(req, res, next) {
     let board = router.boards.get(req.session.uuid).board;
     let game = router.games.find(game => game.id === req.session.uuid);
-    res.send({board: board, game: game, player: req.session.player.color});
+    res.send({board: board, game: game, player: req.session.player});
 });
 
 /* GET renders game page with session board. */

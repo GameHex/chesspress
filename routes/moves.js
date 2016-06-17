@@ -89,8 +89,9 @@ module.exports = function(io) {
         socket.on('moved', function(player){
             console.log(`${socket.request.session.player.name} made a move.`);
             let board = boards.get(socket.request.session.uuid).board;
+            let game = games.find(game => game.id === socket.request.session.uuid);
 
-            io.sockets.in(socket.request.session.uuid).emit('refresh board', board);
+            io.sockets.in(socket.request.session.uuid).emit('refresh board', {board: board, game: game, player: socket.request.session.player});
         });
     });
 

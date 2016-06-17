@@ -3,6 +3,7 @@ var clicked = '';
 var clickedPos = {};
 var moves = [];
 var game = {};
+var player = {};
 var source;
 var template;
 var socket = io();
@@ -35,7 +36,8 @@ function initBoard() {
             board = data;
             game = data.game;
             $('#chessTable').html(template({board: data.board}));
-            socket.emit('joined', data.game.players[data.player].name, data.game.id);
+            player = data.player;
+            socket.emit('joined', data.game.players[data.player.color].name, data.game.id);
         },
         error: function(xhr, type){
             return xhr;
@@ -48,59 +50,62 @@ $(document).ready(function() {
 });
 
 function selectSpace(id, x, y, isEmpty) {
-    var isValidMove = moves.length > 0 ? moves.indexOf(id) > -1 : false;
+    if (player.isMove) {
+        var isValidMove = moves.length > 0 ? moves.indexOf(id) > -1 : false;
 
-    // we know to move a piece if there are valid moves
-    if (moves.length > 0 && isValidMove) {
-        var dat = {from: clickedPos, to: {x: x, y: y}};
+        // we know to move a piece if there are valid moves
+        if (moves.length > 0 && isValidMove) {
+            var dat = {from: clickedPos, to: {x: x, y: y}};
 
-        $.ajax({
-            type: 'POST',
-            url: '/moves/move',
-            data: dat,
-            dataType: 'json',
-            success: function(data){
-                if (data.board) {
-                    moves = [];
-                    $('#chessTable').html(template({board: data.board}));
-                    socket.emit('moved');
-                } else if (data.moves) {
-                    showValidMoves(data.moves);
+            $.ajax({
+                type: 'POST',
+                url: '/moves/move',
+                data: dat,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.board) {
+                        moves = [];
+                        $('#chessTable').html(template({board: data.board}));
+                        socket.emit('moved');
+                    } else if (data.moves) {
+                        showValidMoves(data.moves);
+                    }
+                },
+                error: function (xhr, type) {
+                    return xhr;
                 }
-            },
-            error: function(xhr, type){
-                return xhr;
-            }
-        });
-    }
-
-    // get a list of valid moves to show if a non-empty square is clicked
-    if (!isEmpty) {
-        if (clicked !== '') {
-            $('#' + clicked).removeClass('selected');
+            });
         }
 
-        $('#' + id).addClass('selected');
-        clicked = id;
-        clickedPos = {x: x, y: y};
-
-        $.ajax({
-            type: 'POST',
-            url: '/moves',
-            data: {x: x, y: y},
-            dataType: 'json',
-            success: function(data){
-                showValidMoves(data);
-                $('#' + id).removeClass('validMove');
-            },
-            error: function(xhr, type){
-                return xhr;
+        // get a list of valid moves to show if a non-empty square is clicked
+        if (!isEmpty) {
+            if (clicked !== '') {
+                $('#' + clicked).removeClass('selected');
             }
-        });
+
+            $('#' + id).addClass('selected');
+            clicked = id;
+            clickedPos = {x: x, y: y};
+
+            $.ajax({
+                type: 'POST',
+                url: '/moves',
+                data: {x: x, y: y},
+                dataType: 'json',
+                success: function (data) {
+                    showValidMoves(data);
+                    $('#' + id).removeClass('validMove');
+                },
+                error: function (xhr, type) {
+                    return xhr;
+                }
+            });
+        }
     }
 }
 
 socket.on('refresh board', function(data){
-    $('#chessTable').html(template({board: data}));
+    $('#chessTable').html(template({board: data.board}));
     game = data.game;
+    player = data.player;
 });
