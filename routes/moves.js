@@ -7,7 +7,7 @@ var index = require('./index.js');
 var boards = index.router.boards;
 var games = index.router.games;
 
-function movePiece(board, pos, dest) {
+function movePiece(board, pos, dest, player) {
 
     // TODO: refactor into ChessBoard method
     if (!board[parseInt(pos.y)][parseInt(pos.x)].isEmpty) {
@@ -19,7 +19,8 @@ function movePiece(board, pos, dest) {
                 let splitMove = move.split('-');
                 let possiblePos = {x: parseInt(splitMove[0]), y: parseInt(splitMove[1])};
 
-                if (parseInt(dest.x) === possiblePos.x && parseInt(dest.y) === possiblePos.y) {
+                if (parseInt(dest.x) === possiblePos.x && parseInt(dest.y) === possiblePos.y
+                    && (player.color === board[parseInt(pos.y)][parseInt(pos.x)].color)) {
                     canMove = true;
                 }
             }
@@ -59,7 +60,7 @@ router.post('/', function(req, res, next) {
 /* moves a piece */
 router.post('/move', function(req, res, next) {
     console.log(req.session.uuid);
-    let newBoard = movePiece(boards.get(req.session.uuid).board, req.body.from, req.body.to);
+    let newBoard = movePiece(boards.get(req.session.uuid).board, req.body.from, req.body.to, req.session.player);
 
     if (newBoard.board) {
         boards.set(req.session.uuid, newBoard);
