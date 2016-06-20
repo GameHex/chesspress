@@ -33,7 +33,7 @@ function initBoard() {
         url: '/board',
         dataType: 'json',
         success: function(data){
-            board = data;
+            board = data.board;
             game = data.game;
             $('#chessTable').html(template({board: data.board}));
             player = data.player;
@@ -50,7 +50,9 @@ $(document).ready(function() {
 });
 
 function selectSpace(id, x, y, isEmpty) {
-    if (player.isMove) {
+
+    // restrict player to their own move and color
+    if (player.isMove && (board[y][x].color === player.color || isEmpty)) {
         var isValidMove = moves.length > 0 ? moves.indexOf(id) > -1 : false;
 
         // we know to move a piece if there are valid moves
@@ -66,6 +68,7 @@ function selectSpace(id, x, y, isEmpty) {
                     if (data.board) {
                         moves = [];
                         $('#chessTable').html(template({board: data.board}));
+                        board = data.board;
                         socket.emit('moved');
                     } else if (data.moves) {
                         showValidMoves(data.moves);
