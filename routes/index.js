@@ -28,10 +28,25 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Chesspress', games: router.games });
 });
 
-/* GET retrieves most current version of board. Used in the initial load of the game page */
+/* GET retrieves most current version of board and game state. Used in the initial load of the game page */
 router.get('/board', function(req, res, next) {
+    let session = req.session;
     let board = router.boards.get(req.session.uuid).board;
     let game = router.games.find(game => game.id === req.session.uuid);
+    let gameIndex = router.games.findIndex(game => game.id === req.session.uuid);
+    let playerIDs = [];
+    if (game.players.white) playerIDs.push(game.players.white.id);
+    if (game.players.black) playerIDs.push(game.players.black.id);
+
+    if (!playerIDs.find(id => id === session.player.id)) {
+        console.log(game.players);
+        let color = game.players.white ? 'black' : 'white';
+        let player = new classes.Player(color, session.player.name, uuid.v1());
+
+        req.session.player = player;
+        router.games[gameIndex].players[color] = player;
+    }
+
     res.send({board: board, game: game, player: req.session.player});
 });
 
@@ -39,9 +54,10 @@ router.get('/board', function(req, res, next) {
 router.get('/game', function(req, res, next) {
     let session = req.session;
     let board = router.boards.get(session.uuid);
-    let game = router.games.find(game => game.id === session.uuid);
+    let game = router.games.find(game => game.id === req.session.uuid);
+
     console.log(game);
-    res.render('game', {title: game.name, board: board, playerColor: `player${session.player.color}` })
+    res.render('game', {title: game.name, board: board, playerColor: `player${session.player.color}` });
 });
 
 /* POST creates a new game. */
@@ -53,7 +69,7 @@ router.post('/game', function(req, res, next) {
     let player = new classes.Player('white', req.body.name, uuid.v1());
 
     player.isMove = true;
-    let game =  {name: `${req.body.name}'s game`, id: newID, disabled: false, players: {white: player}};
+    let game =  {name: `${req.body.name}'s game`, id: newID, disabled: false, players: {white: player}, move: 'white'};
 
     router.games.push(game);
     req.session.uuid = game.id;
