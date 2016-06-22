@@ -73,8 +73,6 @@ module.exports = function(io) {
     io.on('connection', (socket) => {
         socket.on('disconnect', function() {
             if (socket.request.session.uuid && socket.request.session.player) {
-                console.log(socket.request.session.uuid);
-                console.log(socket.request.session.player);
                 console.log(`${socket.request.session.player.name} got disconnected!`);
                 let gameIndex = games.findIndex(game => game.id === socket.request.session.uuid);
                 let player = socket.request.session.player;
@@ -91,8 +89,16 @@ module.exports = function(io) {
             console.log(`${socket.request.session.player.name} made a move.`);
             let board = boards.get(socket.request.session.uuid).board;
             let game = games.find(game => game.id === socket.request.session.uuid);
+            let gameIndex = games.findIndex(game => game.id === socket.request.session.uuid);
+            let sessionPlayer = socket.request.session.player;
 
-            io.sockets.in(socket.request.session.uuid).emit('refresh board', {board: board, game: game, player: socket.request.session.player});
+            if (sessionPlayer.color === 'white') {
+                games[gameIndex].move = 'black';
+            } else {
+                games[gameIndex].move = 'white';
+            }
+
+            io.sockets.in(socket.request.session.uuid).emit('refresh board', {board: board, game: game});
         });
     });
 

@@ -52,7 +52,7 @@ $(document).ready(function() {
 function selectSpace(id, x, y, isEmpty) {
 
     // restrict player to their own move and color
-    if (player.isMove && (board[y][x].color === player.color || isEmpty)) {
+    if (game.move === player.color) {
         var isValidMove = moves.length > 0 ? moves.indexOf(id) > -1 : false;
 
         // we know to move a piece if there are valid moves
@@ -110,5 +110,4 @@ function selectSpace(id, x, y, isEmpty) {
 socket.on('refresh board', function(data){
     $('#chessTable').html(template({board: data.board}));
     game = data.game;
-    player = data.player;
 });
