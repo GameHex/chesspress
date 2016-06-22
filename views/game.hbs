@@ -2,6 +2,9 @@
 <script src="javascripts/vendor/handlebars-v4.0.5.js"></script>
 <script src="javascripts/vendor/socket.io-1.4.5.js"></script>
 <script src="javascripts/game_page.js"></script>
+<script id="turn-template" type="text/x-handlebars-template">
+    <h3>\{{move}}'s turn</h3>
+</script>
 <script id="entry-template" type="text/x-handlebars-template">
     \{{#each board as |row i|}}
     <tr>
@@ -13,4 +16,5 @@
 </script>
 
 <h1>{{title}}</h1>
+<div id="turn"></div>
 <table class="{{playerColor}}" id="chessTable" border="1"></table>

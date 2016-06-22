@@ -6,6 +6,8 @@ var game = {};
 var player = {};
 var source;
 var template;
+var turnSource;
+var turnTemplate;
 var socket = io();
 
 function showValidMoves(data) {
@@ -27,6 +29,9 @@ function initBoard() {
     source   = $("#entry-template").html();
     template = Handlebars.compile(source);
 
+    turnSource   = $("#turn-template").html();
+    turnTemplate = Handlebars.compile(turnSource);
+
     // query the board endpoint for the initial board
     $.ajax({
         type: 'GET',
@@ -36,6 +41,7 @@ function initBoard() {
             board = data.board;
             game = data.game;
             $('#chessTable').html(template({board: data.board}));
+            $('#turn').html(turnTemplate({move: game.move.charAt(0).toUpperCase() + game.move.substr(1, game.move.length)}));
             player = data.player;
             socket.emit('joined', data.game.players[data.player.color].name, data.game.id);
         },
@@ -110,4 +116,5 @@ function selectSpace(id, x, y, isEmpty) {
 socket.on('refresh board', function(data){
     $('#chessTable').html(template({board: data.board}));
     game = data.game;
+    $('#turn').html(turnTemplate({move: game.move.charAt(0).toUpperCase() + game.move.substr(1, game.move.length)}));
 });
