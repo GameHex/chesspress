@@ -17,4 +17,10 @@
 
 <h1>{{title}}</h1>
 <div id="turn"></div>
-<table class="{{playerColor}}" id="chessTable" border="1"></table>
+<div class="container">
+    <table class="{{playerColor}}" id="chessTable" border="1"></table>
+    <form class="chat-container">
+        <ul class="chat container-grow"></ul>
+        <input id="chat-input" autocomplete="off" /><button id="chat-send">Send</button>
+    </form>
+</div>
