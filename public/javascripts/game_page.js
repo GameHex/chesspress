@@ -53,6 +53,12 @@ function initBoard() {
 
 $(document).ready(function() {
     initBoard();
+
+    $('form').submit(function() {
+        socket.emit('chat message', $('#chat-input').val());
+        $('#chat-input').val('');
+        return false;
+    });
 });
 
 function selectSpace(id, x, y, isEmpty) {

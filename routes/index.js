@@ -124,6 +124,12 @@ module.exports = function(io) {
             socket.join(uuid);
             io.sockets.in(uuid).emit('chat message', `${player} has joined`);
         });
+
+        socket.on('chat message', function(msg) {
+            if (msg.replace(/ /g, '') !== '') {
+                io.sockets.in(socket.request.session.uuid).emit('chat message', `${socket.request.session.player.name}: ${msg}`);
+            }
+        });
     });
 
     return router;
