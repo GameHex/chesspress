@@ -81,6 +81,8 @@ module.exports = function(io) {
                     games[gameIndex].players[player.color] = undefined;
                     games[gameIndex].disabled = false;
                 }
+
+                io.sockets.in(socket.request.session.uuid).emit('chat message', `${socket.request.session.player.name} disconnected`);
             }
 
         });

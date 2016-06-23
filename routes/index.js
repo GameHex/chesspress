@@ -122,6 +122,7 @@ module.exports = function(io) {
             console.log(`${player} joined game ${uuid}.`);
             io.emit('refresh game list', router.games);
             socket.join(uuid);
+            io.sockets.in(uuid).emit('chat message', `${player} has joined`);
         });
     });
 

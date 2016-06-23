@@ -118,3 +118,7 @@ socket.on('refresh board', function(data){
     game = data.game;
     $('#turn').html(turnTemplate({move: game.move.charAt(0).toUpperCase() + game.move.substr(1, game.move.length)}));
 });
+
+socket.on('chat message', function(msg) {
+    $('#messages').append($('<li>').text(msg));
+});
