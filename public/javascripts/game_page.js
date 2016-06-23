@@ -127,4 +127,5 @@ socket.on('refresh board', function(data){
 
 socket.on('chat message', function(msg) {
     $('#messages').append($('<li>').text(msg));
+    $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight;
 });
