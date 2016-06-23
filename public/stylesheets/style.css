@@ -75,14 +75,14 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
 
 .chat-container {
   display: flex;
-  flex: 1 auto;
+  flex: 1 0 auto;
   flex-direction: column;
   margin: 0 50px;
   max-width: 400px; }
 
 .container-grow {
-  flex: 1;
-  height: 100%; }
+  flex: 1 0 auto;
+  max-height: 75vh; }
 
 .chat {
   border: 1px solid #cecece;
@@ -90,7 +90,8 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
   width: 100%;
   list-style-type: none;
   margin: 0 auto;
-  padding: 0; }
+  padding: 0;
+  overflow: auto; }
 
 .chat li {
   padding: 5px 10px; }
