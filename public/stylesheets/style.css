@@ -91,7 +91,8 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
   list-style-type: none;
   margin: 0 auto;
   padding: 0;
-  overflow: auto; }
+  overflow: auto;
+  word-wrap: break-word; }
 
 .chat li {
   padding: 5px 10px; }
