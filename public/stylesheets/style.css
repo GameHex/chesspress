@@ -82,7 +82,7 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
 
 .container-grow {
   flex: 1 0 auto;
-  max-height: 75vh; }
+  height: 525px; }
 
 .chat {
   border: 1px solid #cecece;

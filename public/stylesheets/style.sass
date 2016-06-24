@@ -1,3 +1,5 @@
+$space-size: 75px
+
 body
   padding: 0
   font: 18px "Lucida Grande", Helvetica, Arial, sans-serif
@@ -9,10 +11,10 @@ h1, h3
   margin: 25px auto 25px 50px
 
 .space
-  min-width: 75px
-  width: 75px
-  min-height: 75px
-  height: 75px
+  min-width: $space-size
+  width: $space-size
+  min-height: $space-size
+  height: $space-size
   text-align: center
   cursor: pointer
   font-size: 50px
@@ -84,8 +86,7 @@ tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd)
 
 .container-grow
   flex: 1 0 auto
-  // TODO: fix max-height for flex boxes
-  max-height: 75vh
+  height: $space-size * 7
 
 .chat
   border: 1px solid #cecece
